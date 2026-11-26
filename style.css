@@ -1,0 +1,169 @@
+/* ===== Cores (mude aqui para trocar o visual) ===== */
+:root {
+  color-scheme: dark;
+  --bg: #0a0a0a;          /* preto do fundo */
+  --glow: #0f2a1c;        /* brilho verde suave no topo */
+  --card: #141414;
+  --card-hover: #1a1f1c;
+  --text: #f2f5f3;
+  --muted: #9aa39e;
+  --border: #242826;
+  --accent: #22c55e;      /* verde principal */
+  --accent-text: #04140a; /* texto em cima do verde */
+}
+
+* { box-sizing: border-box; margin: 0; }
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: radial-gradient(ellipse 80% 50% at top, var(--glow), var(--bg) 70%) fixed, var(--bg);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  padding: 64px 16px 32px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== Chuva de commits (fundo) ===== */
+.rain {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.rain span {
+  position: absolute;
+  top: 0;
+  left: var(--x);
+  width: 1ch;
+  font: 15px/1.2 ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+  color: var(--accent);
+  text-shadow: 0 0 8px rgba(34, 197, 94, .6);
+  word-break: break-all;
+  text-align: center;
+  opacity: var(--o);
+  /* rastro: some em cima, forte embaixo (a "gota") */
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 90%);
+  mask-image: linear-gradient(to bottom, transparent, #000 90%);
+  transform: translateY(-100%);
+  animation: chover var(--d) linear var(--delay) infinite;
+}
+
+@keyframes chover {
+  to { transform: translateY(100vh); }
+}
+
+/* contorno escuro para o texto não se misturar com a chuva */
+h1, .bio, footer { text-shadow: 0 0 6px var(--bg), 0 0 14px var(--bg), 0 0 24px var(--bg); }
+
+main {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===== Cabeçalho ===== */
+.avatar {
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--accent);
+  padding: 3px;
+  background: var(--bg);
+  box-shadow: 0 0 32px rgba(34, 197, 94, .25);
+}
+
+h1 {
+  margin-top: 20px;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  text-align: center;
+}
+
+.bio {
+  margin-top: 6px;
+  color: var(--accent);
+  font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+  font-size: 14px;
+  text-align: center;
+  line-height: 1.5;
+  max-width: 40ch;
+  text-wrap: pretty;
+}
+
+/* ===== Botões de link ===== */
+.links {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.links a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 64px;
+  padding: 12px 18px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform .15s ease-out, background-color .15s, border-color .15s;
+}
+
+.links a:hover { background: var(--card-hover); border-color: var(--accent); }
+.links a:active { transform: scale(.98); }
+
+.links .icon { width: 24px; height: 24px; flex-shrink: 0; color: var(--accent); }
+.links .icon svg { width: 100%; height: 100%; display: block; }
+.links .label { flex: 1; min-width: 0; }
+.links .label small { display: block; font-weight: 400; color: var(--muted); font-size: 13px; margin-top: 2px; overflow-wrap: anywhere; }
+.links .arrow { color: var(--muted); flex-shrink: 0; transition: transform .15s ease-out, color .15s; }
+.links a:hover .arrow { transform: translateX(3px); color: var(--accent); }
+
+/* Link em destaque (adicione class="destaque" no <a>) */
+.links a.destaque { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+.links a.destaque:hover { background: #2fd36b; }
+.links a.destaque .icon,
+.links a.destaque .arrow { color: var(--accent-text); }
+.links a.destaque small { color: rgba(4, 20, 10, .7); }
+
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+footer { margin-top: 48px; color: var(--muted); font-size: 13px; }
+
+/* ===== Animação de entrada ===== */
+@media (prefers-reduced-motion: no-preference) {
+  .avatar, .links li {
+    opacity: 0;
+    transform: translateY(8px);
+    animation: entrar .4s ease-out forwards;
+  }
+  .links li:nth-child(1) { animation-delay: 80ms; }
+  .links li:nth-child(2) { animation-delay: 130ms; }
+  .links li:nth-child(3) { animation-delay: 180ms; }
+  .links li:nth-child(4) { animation-delay: 230ms; }
+  .links li:nth-child(n+5) { animation-delay: 280ms; }
+  @keyframes entrar { to { opacity: 1; transform: none; } }
+}
+
+/* Quem pede menos movimento no sistema não vê a chuva */
+@media (prefers-reduced-motion: reduce) {
+  .rain { display: none; }
+}
